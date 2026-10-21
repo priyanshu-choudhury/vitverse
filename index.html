@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0c0e18" />
+  <meta name="description" content="VITVERSE: an interactive 3D concept experience for the VIT Vellore campus." />
+  <title>VITVERSE — A new perspective on campus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
+    }
+  }
+  </script>
+  <script src="js/app.js" defer></script>
+  <script type="module" src="js/world.js"></script>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div class="app-shell" id="top">
+    <header class="site-header">
+      <a class="wordmark" href="#top" aria-label="VITVERSE homepage">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+        <span>VIT<span class="wordmark-accent">VERSE</span><small>Vellore / Interactive concept</small></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="#explore">Explore<span class="nav-pip"></span></a>
+        <a class="nav-link" href="#spaces">Spaces</a>
+        <a class="nav-link" href="#routes">Routes</a>
+        <a class="nav-link" href="#happenings">Happenings</a>
+      </nav>
+      <div class="header-actions">
+        <div class="clock"><span class="live-dot"></span><span id="liveTime">--:--</span> <span class="clock-suffix">IST</span></div>
+        <button class="header-cta" id="openSearch" type="button" aria-label="Search the campus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 5 5"/></svg><span>Quick find</span><kbd>⌘ K</kbd></button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+      </div>
+    </header>
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation" hidden>
+      <a href="#explore">Explore</a><a href="#spaces">Spaces</a><a href="#routes">Routes</a><a href="#happenings">Happenings</a>
+    </nav>
+    <main>
+      <section class="scene-section" id="explore" aria-labelledby="heroTitle">
+        <div class="scene-frame">
+          <div class="scene-orbit orbit-one"></div><div class="scene-orbit orbit-two"></div>
+          <div id="worldMount" class="world-mount" aria-label="Interactive stylized 3D model of five VIT-inspired campus landmarks">
+            <div class="scene-fallback" id="sceneFallback" aria-hidden="true"><div class="fallback-ring ring-a"></div><div class="fallback-ring ring-b"></div><div class="fallback-core"></div></div>
+          </div>
+          <div id="worldMarkers" class="world-markers" aria-label="3D map landmarks">
+            <button class="map-marker" data-place="library" title="Knowledge Centre" aria-label="Explore Knowledge Centre"><span class="marker-ring"></span><span class="marker-number">01</span><span class="marker-name">KNOWLEDGE CENTRE</span></button>
+            <button class="map-marker" data-place="tech" title="Technology Tower" aria-label="Explore Technology Tower"><span class="marker-ring"></span><span class="marker-number">02</span><span class="marker-name">TECH TOWER</span></button>
+            <button class="map-marker" data-place="food" title="Campus Commons" aria-label="Explore Campus Commons"><span class="marker-ring"></span><span class="marker-number">03</span><span class="marker-name">CAMPUS COMMONS</span></button>
+            <button class="map-marker" data-place="gate" title="Main Gate" aria-label="Explore Main Gate"><span class="marker-ring"></span><span class="marker-number">04</span><span class="marker-name">MAIN GATE</span></button>
+            <button class="map-marker" data-place="innovation" title="Innovation Hub" aria-label="Explore Innovation Hub"><span class="marker-ring"></span><span class="marker-number">05</span><span class="marker-name">INNOVATION HUB</span></button>
+          </div>
+          <div class="scene-vignette" aria-hidden="true"></div>
+          <div class="scene-topline"><div class="tag"><span class="tag-dot"></span> AN INTERACTIVE CAMPUS CONCEPT <span class="tag-number">/ 2026</span></div><span class="scene-coordinate">12°58′ N &nbsp; 79°09′ E <span class="sep">/</span> VELLORE</span></div>
+          <div class="hero-copy">
+            <div class="hero-overline"><span class="overline-bar"></span> THE CAMPUS, REIMAGINED</div>
+            <h1 id="heroTitle">A new<br/>perspective<br/>on <em>campus<span>.</span></em></h1>
+            <p>A little more wonder between classes. Explore a VIT-inspired world, find your next spot, and enjoy the journey.</p>
+            <div class="hero-actions">
+              <button class="primary-btn" id="startExploring" type="button">Enter the experience <span aria-hidden="true">↗</span></button>
+              <a href="#routes" class="text-link">Plan a route <span>↗</span></a>
+            </div>
+            <div class="hero-footnote"><span class="facepile" aria-hidden="true"><b>V</b><b>I</b><b>T</b></span><span>Built for the curious minds of VIT.</span></div>
+          </div>
+          <div class="stage-label"><span class="stage-cross">✣</span> CAMPUS GRID <span class="stage-line"></span> <span id="sceneState">EXPLORE MODE</span></div>
+          <div class="zoom-controls" aria-label="3D model controls">
+            <button id="zoomIn" title="Zoom in" aria-label="Zoom in">+</button>
+            <button id="zoomOut" title="Zoom out" aria-label="Zoom out">−</button>
+            <button id="resetView" title="Reset view" aria-label="Reset 3D view">↺</button>
+          </div>
+          <div class="scene-bottomline"><span><span class="scroll-wheel">↟</span> DRAG TO ORBIT <span class="bottom-dot">·</span> SCROLL TO ZOOM</span><span class="scene-mode"><span class="mode-square"></span> VISUAL CONCEPT — NOT A REAL-WORLD MAP</span></div>
+          <article class="place-spotlight" aria-live="polite"><div class="spotlight-top"><span class="spotlight-kicker">CURRENTLY EXPLORING</span><span class="spotlight-ornament">✳</span></div><h2 id="spotlightTitle">Knowledge Centre</h2><p id="spotlightDescription">A quiet corner for big ideas.</p><button id="spotlightRoute" type="button">Add to route <span>↗</span></button></article>
+        </div>
+      </section>
+      <section class="ticker" aria-label="Campus inspiration"><div class="ticker-track"><span>DISCOVER DIFFERENTLY</span><i>✳</i><span>DESIGNED FOR EXPLORERS</span><i>✳</i><span>MADE FOR VIT</span><i>✳</i><span>DISCOVER DIFFERENTLY</span><i>✳</i><span>DESIGNED FOR EXPLORERS</span><i>✳</i><span>MADE FOR VIT</span><i>✳</i></div></section>
+      <section class="section spaces-section" id="spaces" aria-labelledby="spacesTitle">
+        <div class="section-heading"><div><div class="section-index"><span>01 /</span> YOUR NEXT DISCOVERY</div><h2 id="spacesTitle">There's more to <i>explore.</i></h2><p>Five places, infinite little moments. Select a destination to bring it into focus above.</p></div><div class="section-aside">COLLECTION / <span>05 SPACES</span><br/>VIT VELLORE • CONCEPT</div></div>
+        <div class="spaces-grid" id="spaceCards">
+          <button class="space-card is-selected" type="button" data-place="library"><span class="space-illustration ill-library"><span class="ill-grid"></span><span class="ill-shape"></span><span class="space-num">01 — 05</span></span><span class="space-card-bottom"><span><small>THINK / CREATE</small><strong>Knowledge Centre</strong></span><span class="space-arrow">↗</span></span></button>
+          <button class="space-card" type="button" data-place="tech"><span class="space-illustration ill-tech"><span class="ill-grid"></span><span class="ill-shape"></span><span class="space-num">02 — 05</span></span><span class="space-card-bottom"><span><small>BUILD / INNOVATE</small><strong>Technology Tower</strong></span><span class="space-arrow">↗</span></span></button>
+          <button class="space-card" type="button" data-place="food"><span class="space-illustration ill-food"><span class="ill-grid"></span><span class="ill-shape"></span><span class="space-num">03 — 05</span></span><span class="space-card-bottom"><span><small>MEET / RECHARGE</small><strong>Campus Commons</strong></span><span class="space-arrow">↗</span></span></button>
+          <button class="space-card" type="button" data-place="gate"><span class="space-illustration ill-gate"><span class="ill-grid"></span><span class="ill-shape"></span><span class="space-num">04 — 05</span></span><span class="space-card-bottom"><span><small>ARRIVE / BEGIN</small><strong>Main Gate</strong></span><span class="space-arrow">↗</span></span></button>
+          <button class="space-card" type="button" data-place="innovation"><span class="space-illustration ill-innovation"><span class="ill-grid"></span><span class="ill-shape"></span><span class="space-num">05 — 05</span></span><span class="space-card-bottom"><span><small>DREAM / EXPERIMENT</small><strong>Innovation Hub</strong></span><span class="space-arrow">↗</span></span></button>
+        </div>
+      </section>
+      <section class="section route-section" id="routes" aria-labelledby="routesTitle"><div class="route-panel"><div class="route-decoration" aria-hidden="true"><div class="route-loop"></div><div class="route-loop loop-two"></div><div class="route-center-symbol">✳</div></div><div class="route-info"><div class="section-index"><span>02 /</span> GO SOMEWHERE</div><h2 id="routesTitle">Follow your<br/><i>curiosity.</i></h2><p>Choose two places and watch your journey appear in the 3D world. No boring static maps here.</p><div class="route-disclaimer">✳ Concept routes only. Not for actual navigation.</div></div><form class="route-form" id="routeForm"><div class="form-label">PLAN YOUR CAMPUS JOURNEY <span>↗</span></div><label for="routeFrom">STARTING POINT</label><div class="select-wrap"><span class="select-icon">↗</span><select id="routeFrom" name="from"><option value="gate">Main Gate</option><option value="library">Knowledge Centre</option><option value="tech">Technology Tower</option><option value="food">Campus Commons</option><option value="innovation">Innovation Hub</option></select></div><button class="swap-button" id="swapRoute" type="button" aria-label="Swap start and destination">⇅</button><label for="routeTo">YOUR DESTINATION</label><div class="select-wrap"><span class="select-icon dest-icon">◎</span><select id="routeTo" name="to"><option value="library">Knowledge Centre</option><option value="tech">Technology Tower</option><option value="food">Campus Commons</option><option value="gate">Main Gate</option><option value="innovation">Innovation Hub</option></select></div><button type="submit" class="route-submit">Visualize route <span>↗</span></button><div class="route-result" id="routeResult" role="status" aria-live="polite">Ready when you are. Pick a destination.</div></form></div></section>
+      <section class="section happenings-section" id="happenings" aria-labelledby="happeningsTitle"><div class="section-heading events-heading"><div><div class="section-index"><span>03 /</span> KEEP THE ENERGY GOING</div><h2 id="happeningsTitle">What's the <i>vibe?</i></h2><p>A playful preview of the kinds of things that bring campus together.</p></div><div class="event-tabs" role="group" aria-label="Filter demo happenings"><button type="button" class="event-tab active" data-filter="all" aria-pressed="true">All moments</button><button type="button" class="event-tab" data-filter="creative" aria-pressed="false">Creative</button><button type="button" class="event-tab" data-filter="tech" aria-pressed="false">Tech</button></div></div><div id="eventCards" class="event-grid"><article class="event-card" data-category="creative"><div class="event-icon event-purple">✳</div><div class="event-meta">CREATIVE / SAMPLE ACTIVITY</div><h3>Make Something<br/>Unexpected</h3><p>A spontaneous design jam for curious minds.</p><button type="button" class="save-btn" aria-pressed="false">+ Save idea</button></article><article class="event-card" data-category="tech"><div class="event-icon event-orange">⌘</div><div class="event-meta">TECH / SAMPLE ACTIVITY</div><h3>Build After<br/>Hours</h3><p>A late-night sprint from concept to prototype.</p><button type="button" class="save-btn" aria-pressed="false">+ Save idea</button></article><article class="event-card" data-category="creative"><div class="event-icon event-pink">♫</div><div class="event-meta">CULTURE / SAMPLE ACTIVITY</div><h3>Sounds of<br/>Campus</h3><p>Find the people who share your kind of rhythm.</p><button type="button" class="save-btn" aria-pressed="false">+ Save idea</button></article></div><div class="events-note">These are fictional ideas to demonstrate the interface, not scheduled VIT events.</div></section>
+    </main>
+    <footer class="footer"><div><a class="footer-logo" href="#top">VIT<span>VERSE</span><i>✳</i></a><p>Made with curiosity for the VIT community.<br/>Independent student concept — not affiliated with VIT.</p></div><div class="footer-center">IDEA → DESIGN → INTERACTION <span>✦</span> 2026</div><a href="#top" class="back-top">BACK TO TOP ↑</a></footer>
+  </div>
+  <dialog id="searchDialog" class="search-dialog" aria-label="Quick find locations"><div class="search-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 5 5"/></svg><input type="search" id="searchInput" aria-label="Search campus spaces" placeholder="Where would you like to go?" autocomplete="off"/><button type="button" id="closeSearch" aria-label="Close search">ESC</button></div><div class="search-hint">SPACES & DESTINATIONS</div><div id="searchResults" class="search-results"></div><div class="search-bottom">A concept campus explorer <span>↵ SELECT</span></div></dialog>
+</body>
+</html>
